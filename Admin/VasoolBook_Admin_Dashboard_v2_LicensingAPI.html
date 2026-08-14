@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VasoolBook Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--navy:#102a52;--blue:#2164ad;--green:#20b66a;--red:#d7463d;--orange:#ef8b20;--purple:#7654c6;--ink:#172033;--muted:#718096;--line:#e7edf5;--bg:#f2f6fb;--card:#fff}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,Arial,sans-serif;font-size:13px}
+    button,input,select,textarea{font:inherit}.top{background:linear-gradient(135deg,#0c2343,#1f5d9f);color:#fff;padding:18px 22px;box-shadow:0 4px 18px #102a5230;position:sticky;top:0;z-index:10}
+    .top-in{max-width:1450px;margin:auto;display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;border-radius:14px;background:#20c875;display:grid;place-items:center;font-size:20px;font-weight:900}
+    .brand{flex:1}.brand h1{font-size:20px;margin:0;font-weight:800}.brand p{margin:2px 0 0;color:#c6d9ed;font-size:11px}.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+    .btn-primary{background:var(--green);color:#fff}.btn-light{background:#ffffff18;color:#fff;border:1px solid #ffffff38}.btn-blue{background:var(--blue);color:#fff}.btn-red{background:var(--red);color:#fff}.btn-orange{background:var(--orange);color:#fff}.btn-ghost{background:#f4f7fb;color:var(--navy);border:1px solid var(--line)}
+    main{max-width:1450px;margin:20px auto;padding:0 18px 40px}.notice{background:#fff8e8;border:1px solid #f4d58c;border-left:5px solid var(--orange);padding:11px 14px;border-radius:10px;color:#79521c;margin-bottom:16px;font-size:11px}
+    .notice.ok{background:#e9f9f0;border-color:#a9e6c4;border-left-color:var(--green);color:#166a3f}
+    .notice.err{background:#fdeceb;border-color:#f3bcb8;border-left-color:var(--red);color:#8a2a24}
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;box-shadow:0 3px 12px #102a5210}
+    .stat-label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.07em}.stat-value{font-size:24px;font-weight:800;margin-top:5px;color:var(--navy)}.stat-note{font-size:9px;color:#99a5b5;margin-top:2px}
+    .toolbar{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:minmax(220px,1fr) 180px 180px auto;gap:8px;margin-bottom:14px}
+    .field{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:10px 11px;outline:none;background:#fff;color:var(--ink)}.field:focus{border-color:#75a8dd;box-shadow:0 0 0 3px #2164ad12}
+    .table-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 3px 12px #102a5210}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:1320px}
+    th{background:#f5f8fc;color:#607087;text-align:left;padding:11px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:11px 10px;border-bottom:1px solid #edf1f6;vertical-align:top}
+    tr:hover td{background:#fbfdff}.client-name{font-size:12px;font-weight:800;color:var(--navy)}.sub{font-size:9px;color:var(--muted);margin-top:2px}.mono{font-family:Consolas,monospace;font-size:10px}
+    .badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:9px;font-weight:800;white-space:nowrap}.active{background:#e4f8ed;color:#16864b}.blocked{background:#fde9e8;color:#b62f28}.expired{background:#fde9e8;color:#b62f28}.trialexpired{background:#fde9e8;color:#b62f28}.soon{background:#fff2d9;color:#ac6700}.paid{background:#e4f8ed;color:#16864b}.pending{background:#fff2d9;color:#ac6700}.overdue{background:#fde9e8;color:#b62f28}.lifetime{background:#eee6fb;color:#5a34ad}.trial{background:#e6f1fb;color:#1a5a96}
+    .actions{display:flex;gap:5px;flex-wrap:wrap}.mini{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:7px;padding:6px 7px;font-size:9px;font-weight:700;cursor:pointer}.mini:hover{background:#eef5fd}.mini.danger{color:var(--red)}
+    .empty{text-align:center;padding:45px 20px;color:var(--muted)}.empty b{display:block;font-size:15px;color:var(--navy);margin-bottom:5px}
+    .modal-bg{position:fixed;inset:0;background:#09182bb8;display:none;align-items:center;justify-content:center;padding:16px;z-index:30}.modal{background:#fff;width:min(800px,100%);max-height:94vh;overflow:auto;border-radius:18px;box-shadow:0 20px 70px #0007}
+    .modal-head{padding:16px 18px;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2}.modal-head h2{font-size:16px;margin:0}.close{border:0;background:#ffffff1f;color:#fff;border-radius:8px;width:34px;height:34px;font-size:18px;cursor:pointer}
+    .modal-body{padding:18px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.full{grid-column:1/-1}.label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#65758a;margin-bottom:5px;display:block}.help{font-size:9px;color:#98a3b1;margin-top:4px}.modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--line);position:sticky;bottom:0;background:#fff}
+    .code-box{background:#eff5fc;border:1px solid #cbdcf0;padding:10px;border-radius:9px;font-family:Consolas,monospace;font-weight:700;font-size:11px;word-break:break-all;margin-top:5px}.device-row{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:6px}
+    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(80px);background:#15243a;color:#fff;padding:10px 16px;border-radius:10px;font-size:11px;font-weight:700;opacity:0;transition:.25s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .spin{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid #ffffff55;border-top-color:#fff;animation:sp .7s linear infinite;vertical-align:-2px}
+    @keyframes sp{to{transform:rotate(360deg)}}
+    @media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.top-in{align-items:flex-start}.top-actions{justify-content:flex-end}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+    @media(max-width:620px){.top{padding:13px}.logo{width:40px;height:40px}.brand h1{font-size:16px}.top-actions .btn-light{display:none}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:11px}.stat-value{font-size:19px}.toolbar{grid-template-columns:1fr}.toolbar .btn{width:100%}main{padding:0 10px}.notice{font-size:10px}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-in">
+      <div class="logo">VB</div>
+      <div class="brand"><h1>VasoolBook Admin Dashboard</h1><p>Client licensing, subscriptions and payment control</p></div>
+      <div class="top-actions">
+        <button class="btn btn-light" onclick="openSettingsModal()">⚙ API Settings</button>
+        <button class="btn btn-light" onclick="exportData()">Export Backup</button>
+        <button class="btn btn-primary" onclick="openClientModal()">+ Add Client</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="notice" id="connNotice"><b>Connecting…</b> Checking the licensing API connection.</div>
+    <section class="stats">
+      <div class="stat"><div class="stat-label">Total Clients</div><div class="stat-value" id="sTotal">0</div><div class="stat-note">All registered clients</div></div>
+      <div class="stat"><div class="stat-label">Active</div><div class="stat-value" id="sActive" style="color:var(--green)">0</div><div class="stat-note">Active and not expired</div></div>
+      <div class="stat"><div class="stat-label">Blocked</div><div class="stat-value" id="sBlocked" style="color:var(--red)">0</div><div class="stat-note">Manually blocked</div></div>
+      <div class="stat"><div class="stat-label">Expiring Soon</div><div class="stat-value" id="sSoon" style="color:var(--orange)">0</div><div class="stat-note">Within 15 days</div></div>
+      <div class="stat"><div class="stat-label">Payment Due</div><div class="stat-value" id="sDue" style="color:var(--purple)">0</div><div class="stat-note">Pending or overdue</div></div>
+    </section>
+    <section class="toolbar">
+      <input class="field" id="search" placeholder="Search client, phone, license key..." oninput="render()">
+      <select class="field" id="statusFilter" onchange="render()"><option value="">All Status</option><option>Active</option><option>Blocked</option><option>Expired</option><option>Trial Expired</option><option>Expiring Soon</option></select>
+      <select class="field" id="paymentFilter" onchange="render()"><option value="">All Payments</option><option>Paid</option><option>Pending</option><option>Overdue</option></select>
+      <button class="btn btn-blue" onclick="openClientModal()">+ Add Client</button>
+    </section>
+    <section class="table-card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Client</th><th>Status</th><th>Plan / Expiry</th><th>Devices</th><th>Last Login</th><th>Payment</th><th>License Key</th><th>Actions</th></tr></thead>
+          <tbody id="clientRows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" style="display:none"><b>No clients found</b>Add a client or change the current filters.</div>
+    </section>
+  </main>
+
+  <div class="modal-bg" id="clientModal" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-head"><h2 id="modalTitle">Add Client</h2><button class="close" onclick="closeModal()">x</button></div>
+      <form onsubmit="saveClient(event)">
+        <div class="modal-body">
+          <div class="grid">
+            <div><label class="label">Business / Client Name *</label><input class="field" id="fCompany" required></div>
+            <div><label class="label">Owner Name *</label><input class="field" id="fOwner" required></div>
+            <div><label class="label">WhatsApp Number *</label><input class="field" id="fPhone" required placeholder="919876543210"></div>
+            <div><label class="label">Email</label><input class="field" id="fEmail" type="email"></div>
+            <div><label class="label">Status</label><select class="field" id="fStatus"><option>Active</option><option>Blocked</option></select></div>
+            <div><label class="label">License Plan</label><select class="field" id="fPlan" onchange="onPlanChange()"><option>Trial</option><option>Paid</option><option>Lifetime</option></select></div>
+            <div><label class="label">Subscription Start</label><input class="field" id="fPlanStart" type="date"></div>
+            <div id="expiryWrap"><label class="label">Expiry Date *</label><input class="field" id="fExpiry" type="date"></div>
+            <div><label class="label">Device Limit</label><input class="field" id="fDeviceLimit" type="number" min="1" max="100" value="1"></div>
+            <div><label class="label">Payment Status</label><select class="field" id="fPayment"><option>Paid</option><option>Pending</option><option>Overdue</option></select></div>
+            <div><label class="label">Payment Amount</label><input class="field" id="fAmount" type="number" min="0" value="0"></div>
+            <div class="full" id="devicesWrap"><label class="label">Bound Devices</label><div id="devicesList" class="sub">No devices bound yet — the app binds a device automatically on first successful login.</div></div>
+            <div class="full"><label class="label">Notes</label><textarea class="field" id="fNotes" rows="2"></textarea></div>
+          </div>
+        </div>
+        <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" type="submit" id="saveBtn">Save Client</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="codeModal" onclick="if(event.target===this)closeCodeModal()">
+    <div class="modal" style="width:min(620px,100%)">
+      <div class="modal-head"><h2>License Key</h2><button class="close" onclick="closeCodeModal()">x</button></div>
+      <div class="modal-body" id="codeBody"></div>
+      <div class="modal-foot"><button class="btn btn-ghost" onclick="closeCodeModal()">Close</button></div>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="settingsModal" onclick="if(event.target===this)closeSettingsModal()">
+    <div class="modal" style="width:min(520px,100%)">
+      <div class="modal-head"><h2>API Settings</h2><button class="close" onclick="closeSettingsModal()">x</button></div>
+      <div class="modal-body">
+        <div class="grid">
+          <div class="full"><label class="label">Licensing API Base URL</label><input class="field" id="sApiBase" placeholder="https://your-licensing-api.example.com"></div>
+          <div class="full"><label class="label">Admin API Key</label><input class="field" id="sApiKey" type="password" placeholder="paste the ADMIN_API_KEY from the server .env"></div>
+          <div class="full help">Stored only in this browser's localStorage. Every request from this dashboard sends the key in the <b>x-admin-key</b> header — always use this dashboard over HTTPS.</div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" onclick="closeSettingsModal()">Cancel</button><button class="btn btn-primary" onclick="saveSettings()">Save & Connect</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var SETTINGS_KEY='vb_admin_api_settings_v1';
+    var clients=[], editingId=null, apiBase='', apiKey='';
+
+    function loadSettings(){
+      try{var s=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');apiBase=(s.apiBase||'').replace(/\/+$/,'');apiKey=s.apiKey||'';}catch(e){}
+    }
+    function openSettingsModal(){document.getElementById('sApiBase').value=apiBase;document.getElementById('sApiKey').value=apiKey;document.getElementById('settingsModal').style.display='flex';}
+    function closeSettingsModal(){document.getElementById('settingsModal').style.display='none';}
+    function saveSettings(){
+      apiBase=document.getElementById('sApiBase').value.trim().replace(/\/+$/,'');
+      apiKey=document.getElementById('sApiKey').value.trim();
+      localStorage.setItem(SETTINGS_KEY,JSON.stringify({apiBase:apiBase,apiKey:apiKey}));
+      closeSettingsModal();
+      init();
+    }
+
+    // ---- API helper -------------------------------------------------------
+    function api(path,opts){
+      opts=opts||{};
+      var headers=Object.assign({'Content-Type':'application/json','x-admin-key':apiKey},opts.headers||{});
+      return fetch(apiBase+path,Object.assign({},opts,{headers:headers}))
+        .then(function(res){
+          return res.json().catch(function(){return {};}).then(function(body){
+            if(!res.ok){var err=new Error(body.error||('HTTP '+res.status));err.status=res.status;err.body=body;throw err;}
+            return body;
+          });
+        });
+    }
+
+    function setConnNotice(state,msg){
+      var el=document.getElementById('connNotice');
+      el.className='notice '+(state==='ok'?'ok':state==='err'?'err':'');
+      el.innerHTML='<b>'+(state==='ok'?'Connected.':state==='err'?'Connection problem.':'Connecting…')+'</b> '+msg;
+    }
+
+    function init(){
+      if(!apiBase||!apiKey){
+        setConnNotice('err','Set your Licensing API URL and Admin Key in <b style="cursor:pointer;text-decoration:underline" onclick="openSettingsModal()">API Settings</b> to load clients.');
+        clients=[];render();
+        return;
+      }
+      setConnNotice('','Loading clients from '+esc(apiBase)+' …');
+      api('/api/admin/clients').then(function(rows){
+        clients=rows;
+        setConnNotice('ok','Live data from '+esc(apiBase)+'. Blocking, device limits and payment status are enforced server-side for the app.');
+        render();
+      }).catch(function(err){
+        setConnNotice('err','Could not load clients ('+esc(err.message)+'). Check the API URL/key in Settings and that the server is running.');
+        render();
+      });
+    }
+
+    // ---- formatting helpers ------------------------------------------------
+    function today(){return new Date().toISOString().slice(0,10);}
+    function daysLeft(date){if(!date)return null;return Math.ceil((new Date(date+'T23:59:59')-new Date())/86400000);}
+    function fmtDate(s){if(!s)return '-';var d=new Date(s.length===10?s+'T00:00:00':s);return isNaN(d)?s:d.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:s.length>10?'2-digit':undefined,minute:s.length>10?'2-digit':undefined});}
+    function money(n){return 'Rs '+Math.round(Number(n)||0).toLocaleString('en-IN');}
+    function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+    function cleanPhone(s){var p=String(s||'').replace(/\D/g,'');if(p.length===10)p='91'+p;return p;}
+    function statusBadge(c){var s=c.effectiveStatus||'Active',cl=s==='Active'?'active':s==='Expiring Soon'?'soon':s.replace(/\s+/g,'').toLowerCase();return '<span class="badge '+cl+'">'+esc(s)+'</span>';}
+    function paymentBadge(c){var s=c.payment||'Pending';return '<span class="badge '+s.toLowerCase()+'">'+esc(s)+'</span>';}
+    function planBadge(c){return '<span class="badge '+esc((c.plan||'Trial').toLowerCase())+'">'+esc(c.plan)+'</span>';}
+
+    function render(){
+      var q=document.getElementById('search').value.toLowerCase(),sf=document.getElementById('statusFilter').value,pf=document.getElementById('paymentFilter').value;
+      var filtered=clients.filter(function(c){var hay=[c.company,c.owner,c.phone,c.email,c.licenseKey,(c.devices||[]).map(function(d){return d.deviceId;}).join(' ')].join(' ').toLowerCase();return(!q||hay.indexOf(q)>=0)&&(!sf||c.effectiveStatus===sf)&&(!pf||c.payment===pf);});
+      document.getElementById('sTotal').textContent=clients.length;
+      document.getElementById('sActive').textContent=clients.filter(function(c){return c.effectiveStatus==='Active'||c.effectiveStatus==='Expiring Soon';}).length;
+      document.getElementById('sBlocked').textContent=clients.filter(function(c){return c.status==='Blocked';}).length;
+      document.getElementById('sSoon').textContent=clients.filter(function(c){return c.effectiveStatus==='Expiring Soon';}).length;
+      document.getElementById('sDue').textContent=clients.filter(function(c){return c.payment!=='Paid';}).length;
+      document.getElementById('empty').style.display=filtered.length?'none':'block';
+      document.getElementById('clientRows').innerHTML=filtered.map(function(c){
+        var ds=(c.devices||[]),lim=c.deviceLimit||1;
+        return '<tr><td><div class="client-name">'+esc(c.company)+'</div><div class="sub">'+esc(c.owner)+' | '+esc(c.phone)+'</div><div class="sub">'+esc(c.email||'')+'</div></td>'
+        +'<td>'+statusBadge(c)+'<div class="sub">'+(c.status==='Blocked'?'Admin blocked':(c.plan==='Lifetime'?'No expiry':(daysLeft(c.expiry)+' days remaining')))+'</div></td>'
+        +'<td>'+planBadge(c)+'<div class="sub">'+(c.plan==='Lifetime'?'Lifetime access':'Expiry: '+esc(fmtDate(c.expiry)))+'</div>'+(c.plan!=='Lifetime'?'<button class="mini" onclick="extendClient(\''+c.id+'\',30)">+30 days</button>':'')+'</td>'
+        +'<td><b>'+ds.length+' / '+esc(lim)+'</b><div class="sub mono">'+(ds[0]?esc(ds[0].deviceId):'No device bound')+'</div></td>'
+        +'<td>'+(ds.length?esc(fmtDate(ds[0].lastLogin)):'Never')+'<div class="sub">Recorded login</div></td>'
+        +'<td>'+paymentBadge(c)+'<div class="sub">'+money(c.amount)+'</div><button class="mini" onclick="cyclePayment(\''+c.id+'\')">Change</button></td>'
+        +'<td><div class="mono" style="max-width:190px;word-break:break-all">'+esc(c.licenseKey)+'</div><button class="mini" onclick="showCodes(\''+c.id+'\')">View / Copy</button></td>'
+        +'<td><div class="actions"><button class="mini" onclick="openClientModal(\''+c.id+'\')">Edit</button><button class="mini" onclick="toggleClient(\''+c.id+'\')">'+(c.status==='Blocked'?'Activate':'Block')+'</button><button class="mini" onclick="whatsApp(\''+c.id+'\')">WhatsApp</button><button class="mini danger" onclick="removeClient(\''+c.id+'\')">Delete</button></div></td></tr>';
+      }).join('');
+    }
+
+    function onPlanChange(){
+      var plan=document.getElementById('fPlan').value;
+      document.getElementById('expiryWrap').style.display=plan==='Lifetime'?'none':'block';
+    }
+
+    function openClientModal(id){
+      editingId=id||null;var c=clients.find(function(x){return x.id===id;})||{};
+      document.getElementById('modalTitle').textContent=id?'Edit Client':'Add Client';
+      document.getElementById('fCompany').value=c.company||'';document.getElementById('fOwner').value=c.owner||'';document.getElementById('fPhone').value=c.phone||'';document.getElementById('fEmail').value=c.email||'';
+      document.getElementById('fStatus').value=c.status||'Active';document.getElementById('fPlan').value=c.plan||'Trial';
+      document.getElementById('fPlanStart').value=c.planStart||today();document.getElementById('fExpiry').value=c.expiry||'';document.getElementById('fDeviceLimit').value=c.deviceLimit||1;
+      document.getElementById('fPayment').value=c.payment||'Pending';document.getElementById('fAmount').value=c.amount||0;document.getElementById('fNotes').value=c.notes||'';
+      var devicesEl=document.getElementById('devicesList');
+      if(id&&(c.devices||[]).length){
+        devicesEl.innerHTML=c.devices.map(function(d){return '<div class="device-row"><div class="code-box" style="margin-top:0">'+esc(d.deviceId)+' <span style="color:#8b98a9">— last login '+esc(fmtDate(d.lastLogin))+'</span></div><button type="button" class="btn btn-red" style="padding:8px 10px" onclick="removeDevice(\''+c.id+'\',\''+esc(d.deviceId)+'\')">Unbind</button></div>';}).join('');
+      } else {
+        devicesEl.textContent='No devices bound yet — the app binds a device automatically on first successful login.';
+      }
+      onPlanChange();
+      document.getElementById('clientModal').style.display='flex';
+    }
+    function closeModal(){document.getElementById('clientModal').style.display='none';editingId=null;}
+
+    function saveClient(e){
+      e.preventDefault();
+      var plan=document.getElementById('fPlan').value;
+      var data={
+        company:document.getElementById('fCompany').value.trim(),
+        owner:document.getElementById('fOwner').value.trim(),
+        phone:cleanPhone(document.getElementById('fPhone').value),
+        email:document.getElementById('fEmail').value.trim(),
+        status:document.getElementById('fStatus').value,
+        plan:plan,
+        planStart:document.getElementById('fPlanStart').value||today(),
+        expiry:plan==='Lifetime'?null:document.getElementById('fExpiry').value,
+        deviceLimit:Number(document.getElementById('fDeviceLimit').value)||1,
+        payment:document.getElementById('fPayment').value,
+        amount:Number(document.getElementById('fAmount').value)||0,
+        notes:document.getElementById('fNotes').value.trim(),
+      };
+      if(plan!=='Lifetime'&&!data.expiry){alert('Please set an expiry date, or choose the Lifetime plan.');return;}
+      var btn=document.getElementById('saveBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Saving...';
+      var req=editingId?api('/api/admin/clients/'+editingId,{method:'PUT',body:JSON.stringify(data)}):api('/api/admin/clients',{method:'POST',body:JSON.stringify(data)});
+      req.then(function(saved){
+        if(editingId){var i=clients.findIndex(function(x){return x.id===editingId;});clients[i]=saved;}else{clients.unshift(saved);}
+        closeModal();render();toast('Client saved');
+        if(!editingId){showCodes(saved.id);} // surface the new License Key immediately
+      }).catch(function(err){alert('Save failed: '+err.message);}).finally(function(){btn.disabled=false;btn.textContent='Save Client';});
+    }
+
+    function toggleClient(id){
+      api('/api/admin/clients/'+id+'/toggle-status',{method:'POST'}).then(function(saved){
+        var i=clients.findIndex(function(x){return x.id===id;});clients[i]=saved;render();toast('Client '+saved.status.toLowerCase());
+      }).catch(function(err){alert('Failed: '+err.message);});
+    }
+    function extendClient(id,days){
+      api('/api/admin/clients/'+id+'/extend',{method:'POST',body:JSON.stringify({days:days})}).then(function(saved){
+        var i=clients.findIndex(function(x){return x.id===id;});clients[i]=saved;render();toast('Subscription extended by '+days+' days');
+      }).catch(function(err){alert('Failed: '+err.message);});
+    }
+    function cyclePayment(id){
+      var c=clients.find(function(x){return x.id===id;});if(!c)return;
+      var a=['Paid','Pending','Overdue'],next=a[(a.indexOf(c.payment)+1)%a.length];
+      api('/api/admin/clients/'+id,{method:'PUT',body:JSON.stringify({payment:next})}).then(function(saved){
+        var i=clients.findIndex(function(x){return x.id===id;});clients[i]=saved;render();toast('Payment marked '+next);
+      }).catch(function(err){alert('Failed: '+err.message);});
+    }
+    function removeClient(id){
+      var c=clients.find(function(x){return x.id===id;});if(!c||!confirm('Delete '+c.company+'? This revokes their license immediately.'))return;
+      api('/api/admin/clients/'+id,{method:'DELETE'}).then(function(){
+        clients=clients.filter(function(x){return x.id!==id;});render();toast('Client deleted');
+      }).catch(function(err){alert('Failed: '+err.message);});
+    }
+    function removeDevice(clientId,deviceId){
+      if(!confirm('Unbind device '+deviceId+'? This frees a device slot; the device will need to re-validate.'))return;
+      api('/api/admin/clients/'+clientId+'/devices/'+encodeURIComponent(deviceId),{method:'DELETE'}).then(function(saved){
+        var i=clients.findIndex(function(x){return x.id===clientId;});clients[i]=saved;openClientModal(clientId);render();toast('Device unbound');
+      }).catch(function(err){alert('Failed: '+err.message);});
+    }
+    function regenerateKey(id,clearDevices){
+      if(!confirm('Generate a new License Key for this client?'+(clearDevices?' All bound devices will be unbound and must re-activate.':'')))return;
+      api('/api/admin/clients/'+id+'/regenerate-key',{method:'POST',body:JSON.stringify({clearDevices:!!clearDevices})}).then(function(saved){
+        var i=clients.findIndex(function(x){return x.id===id;});clients[i]=saved;render();showCodes(id);toast('License key regenerated');
+      }).catch(function(err){alert('Failed: '+err.message);});
+    }
+
+    function showCodes(id){
+      var c=clients.find(function(x){return x.id===id;});if(!c)return;
+      var html='<p style="margin-top:0;color:#667085">License Key for <b>'+esc(c.company)+'</b> — '+esc(c.plan)+(c.plan==='Lifetime'?'':', expiring '+esc(fmtDate(c.expiry)))+'.</p>'
+        +'<div class="label">License Key (enter this in the VasoolBook app to activate)</div>'
+        +'<div class="device-row"><div class="code-box">'+esc(c.licenseKey)+'</div><button class="btn btn-blue" onclick="copyText(\''+esc(c.licenseKey)+'\')">Copy</button></div>'
+        +'<div class="help" style="margin-top:14px">Device limit: '+esc(c.deviceLimit)+'. Devices bind automatically the first time each one validates successfully — no manual Device ID entry needed.</div>'
+        +'<button class="btn btn-orange" style="margin-top:14px" onclick="regenerateKey(\''+id+'\',true)">Regenerate Key & Unbind Devices</button>';
+      document.getElementById('codeBody').innerHTML=html;document.getElementById('codeModal').style.display='flex';
+    }
+    function closeCodeModal(){document.getElementById('codeModal').style.display='none';}
+    function copyText(t){navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t).then(function(){toast('Copied to clipboard');}):prompt('Copy',t);}
+    function whatsApp(id){
+      var c=clients.find(function(x){return x.id===id;});if(!c)return;
+      var st=c.effectiveStatus,msg='Hello '+c.owner+', your VasoolBook '+c.plan+' subscription status is '+st+'. '+(c.plan==='Lifetime'?'':'Expiry date: '+fmtDate(c.expiry)+'. ')+'Payment status: '+c.payment+'. Your License Key: '+c.licenseKey+'. Please contact us for renewal or support.';
+      window.open('https://wa.me/'+cleanPhone(c.phone)+'?text='+encodeURIComponent(msg),'_blank');
+    }
+    function exportData(){var blob=new Blob([JSON.stringify({app:'VasoolBook Admin Dashboard',version:2,exportedAt:new Date().toISOString(),clients:clients},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='VasoolBook_Admin_Backup_'+today()+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(a.href);},1000);toast('Backup exported (read-only copy — restore via server admin tools)');}
+    function toast(s){var el=document.getElementById('toast');el.textContent=s;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove('show');},2200);}
+
+    loadSettings();
+    init();
+  </script>
+</body>
+</html>
